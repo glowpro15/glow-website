@@ -22,6 +22,7 @@ content:
           - { name: client, label: اسم العميل, type: string }
           - name: category
             label: النوع
+            description: لو ضفت قسم جديد من "الأقسام والخدمات" وعاوزه يظهر هنا، اطلب إضافته للقائمة دي.
             type: select
             required: true
             options:
@@ -37,6 +38,45 @@ content:
           - { name: result, label: النتيجة (اختياري), description: زي "+40% مبيعات"., type: string }
           - { name: result_en, label: النتيجة بالإنجليزي (اختياري), type: string }
           - { name: big, label: كارت كبير, description: بيخلي المشروع ياخد مساحة أكبر. يفضل مشروع أو اتنين بس., type: boolean }
+
+  - name: sections
+    label: الأقسام والخدمات
+    type: file
+    path: content/sections.json
+    format: json
+    fields:
+      - name: sections
+        label: الأقسام
+        description: خدمات الماركتينج والأقسام الإضافية في البروداكشن، زي البودكاست. كل قسم بيظهر لوحده في صفحته وفي القائمة اللي فوق والفوتر وفورم التواصل. القسم الفاضي مش بيظهر.
+        type: object
+        list: true
+        fields:
+          - name: page
+            label: الصفحة
+            type: select
+            required: true
+            options:
+              values:
+                - { value: production, label: البروداكشن }
+                - { value: marketing, label: الماركتينج }
+          - { name: title, label: اسم القسم, type: string, required: true }
+          - { name: title_en, label: اسم القسم بالإنجليزي, description: مهم عشان رابط القسم. لو اتساب فاضي، الموقع بيعمل رابط برقم., type: string }
+          - { name: hide, label: إخفاء القسم مؤقتًا, description: علّم هنا لو القسم لسه مش جاهز يظهر., type: boolean }
+          - { name: intro, label: وصف قصير, type: text }
+          - { name: intro_en, label: الوصف بالإنجليزي (اختياري), type: text }
+          - { name: points, label: النقاط, description: زي "خطة محتوى شهرية". سطر لكل نقطة., type: string, list: true }
+          - { name: points_en, label: النقاط بالإنجليزي (اختياري), type: string, list: true }
+          - name: items
+            label: صور وفيديوهات (اختياري)
+            description: نماذج من الشغل في القسم ده. كل واحدة صورة أو رابط فيديو أو الاتنين.
+            type: object
+            list: true
+            fields:
+              - { name: title, label: العنوان, type: string }
+              - { name: title_en, label: العنوان بالإنجليزي (اختياري), type: string }
+              - { name: image, label: الصورة, type: image }
+              - { name: video, label: رابط الفيديو, description: YouTube أو Vimeo أو Instagram أو TikTok., type: string }
+          - { name: id, label: كود القسم, description: سيبه زي ما هو. للأقسام الجديدة ممكن يفضل فاضي., type: string }
 
   - name: models
     label: الموديلز

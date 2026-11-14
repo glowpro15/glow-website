@@ -327,3 +327,11 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .is-editing [data-edit].is-empty::after { content: "القسم ده فاضي ومش ظاهر للزوار. دوس على القلم عشان تضيف."; display: block; padding: 24px var(--gutter); color: var(--muted); font-weight: 600; }
 .edit-bar { position: fixed; z-index: 60; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; padding: 8px 14px; background: var(--gray); color: var(--beige); font-size: .9rem; white-space: nowrap; }
 .edit-bar a { color: var(--yellow); }
+
+/* Sections added from the dashboard */
+.svc .section-media { grid-column: 1 / -1; margin-top: 8px; }
+.extra__points { max-width: 40em; }
+.extra__points li { padding-block: 9px; border-top: 1px solid var(--line); }
+.extra .section-media { margin-top: clamp(24px, 4vw, 48px); }
+.is-editing #extraSections, .is-editing #services { padding-top: 60px; }
+.is-editing #extraSections.is-empty::after { content: "مفيش أقسام إضافية لسه. دوس على القلم عشان تضيف قسم زي البودكاست."; }

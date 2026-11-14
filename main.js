@@ -1,9 +1,9 @@
 // Content (projects, models, reels, studio, contact details) lives in content/*.json
 // and is edited from the dashboard. This file only holds the site structure and fixed copy.
-const CONTENT = ['site', 'home', 'works', 'studio', 'models', 'reels'];
+const CONTENT = ['site', 'home', 'works', 'studio', 'models', 'reels', 'sections'];
 const DATA = Object.fromEntries(CONTENT.map((name) => [name, {}]));
 
-// Site structure. Change a label or service here and it updates the menu, pages and contact form.
+// Fixed site structure. Sections added from the dashboard are appended by groups().
 const NAV = [
   {
     id: 'production', href: 'production.html', label: { ar: 'البروداكشن', en: 'Production' },
@@ -13,36 +13,8 @@ const NAV = [
       { id: 'reels', href: 'production.html#reels', label: { ar: 'الريلز', en: 'Reels' } },
     ],
   },
-  {
-    id: 'marketing', href: 'marketing.html', label: { ar: 'الماركتينج', en: 'Marketing' },
-    items: [
-      {
-        id: 'social', href: 'marketing.html#social', label: { ar: 'إدارة السوشيال ميديا', en: 'Social Media Management' },
-        desc: { ar: 'بنخطط المحتوى وننشره ونتابع جمهورك كل يوم.', en: 'We plan and publish content and look after your audience every day.' },
-        points: { ar: ['خطة محتوى شهرية', 'تصميم وكتابة البوستات', 'متابعة الردود والتقارير'], en: ['Monthly content plan', 'Post design and copy', 'Community replies and reports'] },
-      },
-      {
-        id: 'ads', href: 'marketing.html#ads', label: { ar: 'الإعلانات الرقمية', en: 'Digital Ads' },
-        desc: { ar: 'إعلانات مدفوعة على المنصات اللي جمهورك موجود عليها، وبتتقاس بالنتيجة.', en: 'Paid ads on the platforms your audience uses, measured by results.' },
-        points: { ar: ['إعداد الحملات والاستهداف', 'اختبار الإعلانات وتحسينها', 'تقارير واضحة'], en: ['Campaign setup and targeting', 'Ad testing and optimization', 'Clear reports'] },
-      },
-      {
-        id: 'branding', href: 'marketing.html#branding', label: { ar: 'البراندينج', en: 'Branding' },
-        desc: { ar: 'نبني شكل البراند وصوته عشان الناس تفتكره.', en: 'We build how your brand looks and sounds so people remember it.' },
-        points: { ar: ['اللوجو والهوية البصرية', 'دليل استخدام البراند', 'أسلوب الكلام'], en: ['Logo and visual identity', 'Brand guidelines', 'Tone of voice'] },
-      },
-      {
-        id: 'strategy', href: 'marketing.html#strategy', label: { ar: 'استراتيجية الماركتينج', en: 'Marketing Strategy' },
-        desc: { ar: 'نحدد السوق والجمهور والرسالة قبل ما نصرف جنيه.', en: 'We define the market, audience and message before spending a pound.' },
-        points: { ar: ['تحليل السوق والمنافسين', 'تحديد الجمهور والرسالة', 'خطة بمراحل واضحة'], en: ['Market and competitor analysis', 'Audience and message', 'A clear phased plan'] },
-      },
-      {
-        id: 'campaigns', href: 'marketing.html#campaigns', label: { ar: 'الحملات', en: 'Campaigns' },
-        desc: { ar: 'فكرة واحدة بتتنفذ على كل القنوات، من الفيلم للإعلان للسوشيال.', en: 'One idea delivered across every channel, from film to ads to social.' },
-        points: { ar: ['الفكرة والكونسبت', 'التنفيذ مع فريق البروداكشن', 'قياس النتايج'], en: ['Idea and concept', 'Execution with the production team', 'Measuring results'] },
-      },
-    ],
-  },
+  // Marketing services, and any extra production sections, come from content/sections.json.
+  { id: 'marketing', href: 'marketing.html', label: { ar: 'الماركتينج', en: 'Marketing' }, items: [] },
 ];
 
 // English copy. The Arabic copy lives in the HTML and is captured on load.
@@ -97,8 +69,33 @@ const UI = {
 };
 
 const SHAPES = ['wedge', 'diamond', 'vee', 'arrow'];
-const allItems = NAV.flatMap((g) => g.items);
-const labelOf = (id) => allItems.find((i) => i.id === id)?.label[lang] ?? '';
+// Sections from the dashboard: a page, a title, and some text, points or media to show.
+// Each keeps its id (used in links and the contact form) or gets one from its English title.
+const FIXED_IDS = new Set(['studio', 'models', 'reels', 'services', 'work', 'main', 'top']);
+function sectionsFor(pageId) {
+  const used = new Set(FIXED_IDS);
+  return list(DATA.sections.sections).map((s, n) => {
+    const slug = String(s.id || s.title_en || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    let id = slug && !used.has(slug) ? slug : `section-${n + 1}`;
+    while (used.has(id)) id += '-x';
+    used.add(id);
+    return { ...s, id };
+  }).filter((s) => s.page === pageId && !s.hide && s.title
+    && (s.intro || list(s.points).length || list(s.items).length));
+}
+// Models and reels appear in the menus only once they have content, like their sections.
+const hasContent = {
+  models: () => list(DATA.models.models).some((m) => m.name || m.photo),
+  reels: () => list(DATA.reels.reels).some((r) => safeUrl(r.url)),
+};
+const groups = () => NAV.map((g) => ({
+  ...g,
+  items: [...g.items.filter((i) => !hasContent[i.id] || hasContent[i.id]()), ...sectionsFor(g.id).map((s) => ({
+    id: s.id, href: `${g.href}#${s.id}`, label: { ar: s.title, en: s.title_en || s.title },
+  }))],
+}));
+const allItems = () => groups().flatMap((g) => g.items);
+const labelOf = (id) => allItems().find((i) => i.id === id)?.label[lang] ?? '';
 const $ = (id) => document.getElementById(id);
 const each = (selector, fn) => document.querySelectorAll(selector).forEach(fn);
 
@@ -132,7 +129,7 @@ const EDITING = (() => {
 })();
 const EDIT_LABELS = {
   works: 'الأعمال', models: 'الموديلز', reels: 'الريلز', studio: 'الاستوديو',
-  home: 'العملاء والأرقام', site: 'بيانات التواصل والشوريل',
+  home: 'العملاء والأرقام', site: 'بيانات التواصل والشوريل', sections: 'الأقسام والخدمات',
 };
 // A content section shows when it has something; in edit mode it also shows empty, marked for the owner.
 const showIf = (el, ok) => {
@@ -248,12 +245,12 @@ function renderChrome() {
   $('skip').textContent = ui.skip;
   $('headerContact').textContent = ui.contact;
   $('lang').textContent = lang === 'ar' ? 'EN' : 'ع';
-  $('nav').innerHTML = NAV.map((g) => `
+  $('nav').innerHTML = groups().map((g) => `
     <div class="nav__group">
       <a class="nav__top" href="${g.href}"${page === g.id ? ' aria-current="page"' : ''}>${g.label[lang]}</a>
       <div class="nav__panel">${g.items.map((i) => `<a href="${i.href}">${i.label[lang]}</a>`).join('')}</div>
     </div>`).join('') + `<a class="nav__top nav__contact" href="contact.html">${ui.contact}</a>`;
-  $('footerMap').innerHTML = NAV.map((g) => `
+  $('footerMap').innerHTML = groups().map((g) => `
     <div><a class="footer__head" href="${g.href}">${g.label[lang]}</a>
     ${g.items.map((i) => `<a href="${i.href}">${i.label[lang]}</a>`).join('')}</div>`).join('')
     + `<div><a class="footer__head" href="contact.html">${ui.contact}</a></div>`;
@@ -337,27 +334,42 @@ function renderWork() {
     b.addEventListener('click', () => { filter = id; renderWork(); });
     box.append(b);
   });
-  grid.innerHTML = works.map((w, n) => ({ w, n })).filter(({ w }) => filter === 'all' || w.category === filter).map(({ w, n }) => {
-    const video = safeUrl(w.video);
-    const image = safeUrl(w.image) || (video && player(video)?.thumb) || '';
-    const meta = [w.client, tx(w, 'result')].filter(Boolean).map(esc).join(' · ');
-    return `
-    <article class="card card--${n % 3 === 1 ? 'yellow' : 'dark'}${image ? ' card--photo' : ''}${w.big && filter === 'all' ? ' card--wide' : ''}" style="--poly:var(--${SHAPES[n % 4]})">
+  grid.innerHTML = works.map((w, n) => ({ w, n })).filter(({ w }) => filter === 'all' || w.category === filter)
+    .map(({ w, n }) => mediaCard(w, n, { tag: labelOf(w.category), meta: [w.client, tx(w, 'result')], wide: w.big && filter === 'all' }))
+    .join('');
+}
+
+// One project or media card: photo (or the video's own thumbnail), title, and a play button for videos.
+function mediaCard(item, n, { tag = '', meta = [], wide = false } = {}) {
+  const video = safeUrl(item.video);
+  const image = safeUrl(item.image) || (video && player(video)?.thumb) || '';
+  const title = tx(item, 'title');
+  const info = meta.filter(Boolean).map(esc).join(' · ');
+  return `
+    <article class="card card--${n % 3 === 1 ? 'yellow' : 'dark'}${image ? ' card--photo' : ''}${wide ? ' card--wide' : ''}" style="--poly:var(--${SHAPES[n % 4]})">
       ${image ? `<img class="card__img" src="${esc(image)}" alt="" loading="lazy">` : '<span class="card__art"></span>'}
       <div class="card__body">
-        <span class="card__cat">${esc(labelOf(w.category))}</span>
-        <h3>${esc(tx(w, 'title'))}</h3>
-        ${meta ? `<span class="card__meta">${meta}</span>` : ''}
+        ${tag ? `<span class="card__cat">${esc(tag)}</span>` : ''}
+        ${title ? `<h3>${esc(title)}</h3>` : ''}
+        ${info ? `<span class="card__meta">${info}</span>` : ''}
       </div>
-      ${video ? `<button class="card__link" type="button" data-video="${esc(video)}" aria-label="${esc(`${ui.play}: ${tx(w, 'title')}`)}"><span class="reel__icon"></span></button>` : ''}
+      ${video ? `<button class="card__link" type="button" data-video="${esc(video)}" aria-label="${esc(title ? `${UI[lang].play}: ${title}` : UI[lang].play)}"><span class="reel__icon"></span></button>` : ''}
     </article>`;
-  }).join('');
 }
+
+const mediaGrid = (items) => {
+  const media = list(items).filter((i) => safeUrl(i.image) || safeUrl(i.video));
+  return media.length ? `<div class="grid section-media">${media.map((i, n) => mediaCard(i, n)).join('')}</div>` : '';
+};
+const pointsList = (s) => {
+  const points = (lang === 'en' && list(s.points_en).length ? list(s.points_en) : list(s.points)).filter(Boolean);
+  return points.length ? `<ul>${points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>` : '';
+};
 
 function renderSubnav() {
   const box = $('subnav');
   if (!box) return;
-  const group = NAV.find((g) => g.id === page);
+  const group = groups().find((g) => g.id === page);
   const items = group.items.filter((i) => !$(i.id)?.hidden);
   box.hidden = items.length < 2;
   box.innerHTML = items.map((i) => `<a href="#${i.id}">${i.label[lang]}</a>`).join('');
@@ -366,16 +378,35 @@ function renderSubnav() {
 function renderServices() {
   const box = $('services');
   if (!box || page !== 'marketing') return;
-  const group = NAV.find((g) => g.id === 'marketing');
-  box.innerHTML = group.items.map((s, n) => `
+  const services = sectionsFor('marketing');
+  showIf(box, services.length > 0);
+  box.innerHTML = services.map((s, n) => `
     <article class="svc" id="${s.id}">
-      <span class="svc__num">0${n + 1}</span>
-      <div><h2>${s.label[lang]}</h2><p class="lead">${s.desc[lang]}</p></div>
+      <span class="svc__num">${String(n + 1).padStart(2, '0')}</span>
+      <div><h2>${esc(tx(s, 'title'))}</h2>${tx(s, 'intro') ? `<p class="lead">${esc(tx(s, 'intro'))}</p>` : ''}</div>
       <div>
-        <ul>${s.points[lang].map((p) => `<li>${p}</li>`).join('')}</ul>
+        ${pointsList(s)}
         <a class="btn btn--ghost btn--small" href="contact.html?type=${s.id}">${UI[lang].ask}</a>
       </div>
+      ${mediaGrid(s.items)}
     </article>`).join('');
+}
+
+// Extra production sections added from the dashboard (Podcast, for example), after the reels.
+function renderExtraSections() {
+  const box = $('extraSections');
+  if (!box) return;
+  const extra = sectionsFor('production');
+  showIf(box, extra.length > 0);
+  box.innerHTML = extra.map((s, n) => `
+    <section class="section extra${n % 2 ? ' section--dark' : ''}" id="${s.id}">
+      <div class="section__head">
+        <div><h2>${esc(tx(s, 'title'))}</h2>${tx(s, 'intro') ? `<p class="lead">${esc(tx(s, 'intro'))}</p>` : ''}</div>
+        <a class="btn${n % 2 ? '' : ' btn--ghost'}" href="contact.html?type=${s.id}">${UI[lang].ask}</a>
+      </div>
+      ${pointsList(s) ? `<div class="extra__points">${pointsList(s)}</div>` : ''}
+      ${mediaGrid(s.items)}
+    </section>`).join('');
 }
 
 function renderProduction() {
@@ -430,12 +461,14 @@ function renderProduction() {
 function renderTypeOptions() {
   const select = $('typeSelect');
   if (!select) return;
-  const current = select.value || new URLSearchParams(location.search).get('type') || 'unsure';
-  select.innerHTML = NAV.map((g) => `
+  const asked = new URLSearchParams(location.search).get('type');
+  const current = (select.dataset.touched && select.value) || asked || select.value || 'unsure';
+  select.onchange = () => { select.dataset.touched = '1'; };
+  select.innerHTML = groups().map((g) => `
     <optgroup label="${g.label[lang]}">
       ${g.items.map((i) => `<option value="${i.id}">${i.label[lang]}</option>`).join('')}
     </optgroup>`).join('') + `<option value="unsure">${UI[lang].unsure}</option>`;
-  select.value = allItems.some((i) => i.id === current) ? current : 'unsure';
+  select.value = allItems().some((i) => i.id === current) ? current : 'unsure';
 }
 
 function render() {
@@ -451,6 +484,7 @@ function render() {
   renderWork();
   renderServices();
   renderProduction();
+  renderExtraSections();
   renderSubnav();
   renderTypeOptions();
 }
@@ -465,7 +499,7 @@ function setLang(next) {
 function renderDoors() {
   const box = $('doors');
   if (!box) return;
-  box.innerHTML = NAV.map((g, n) => `
+  box.innerHTML = groups().map((g, n) => `
     <article class="door door--${n ? 'yellow' : 'dark'}">
       <h3><a href="${g.href}">${g.label[lang]}</a></h3>
       <ul>${g.items.map((i) => `<li><a href="${i.href}">${i.label[lang]}</a></li>`).join('')}</ul>

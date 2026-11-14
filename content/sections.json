@@ -1,0 +1,104 @@
+{
+  "sections": [
+    {
+      "id": "social",
+      "page": "marketing",
+      "hide": false,
+      "title": "إدارة السوشيال ميديا",
+      "title_en": "Social Media Management",
+      "intro": "بنخطط المحتوى وننشره ونتابع جمهورك كل يوم.",
+      "intro_en": "We plan and publish content and look after your audience every day.",
+      "points": [
+        "خطة محتوى شهرية",
+        "تصميم وكتابة البوستات",
+        "متابعة الردود والتقارير"
+      ],
+      "points_en": [
+        "Monthly content plan",
+        "Post design and copy",
+        "Community replies and reports"
+      ],
+      "items": []
+    },
+    {
+      "id": "ads",
+      "page": "marketing",
+      "hide": false,
+      "title": "الإعلانات الرقمية",
+      "title_en": "Digital Ads",
+      "intro": "إعلانات مدفوعة على المنصات اللي جمهورك موجود عليها، وبتتقاس بالنتيجة.",
+      "intro_en": "Paid ads on the platforms your audience uses, measured by results.",
+      "points": [
+        "إعداد الحملات والاستهداف",
+        "اختبار الإعلانات وتحسينها",
+        "تقارير واضحة"
+      ],
+      "points_en": [
+        "Campaign setup and targeting",
+        "Ad testing and optimization",
+        "Clear reports"
+      ],
+      "items": []
+    },
+    {
+      "id": "branding",
+      "page": "marketing",
+      "hide": false,
+      "title": "البراندينج",
+      "title_en": "Branding",
+      "intro": "نبني شكل البراند وصوته عشان الناس تفتكره.",
+      "intro_en": "We build how your brand looks and sounds so people remember it.",
+      "points": [
+        "اللوجو والهوية البصرية",
+        "دليل استخدام البراند",
+        "أسلوب الكلام"
+      ],
+      "points_en": [
+        "Logo and visual identity",
+        "Brand guidelines",
+        "Tone of voice"
+      ],
+      "items": []
+    },
+    {
+      "id": "strategy",
+      "page": "marketing",
+      "hide": false,
+      "title": "استراتيجية الماركتينج",
+      "title_en": "Marketing Strategy",
+      "intro": "نحدد السوق والجمهور والرسالة قبل ما نصرف جنيه.",
+      "intro_en": "We define the market, audience and message before spending a pound.",
+      "points": [
+        "تحليل السوق والمنافسين",
+        "تحديد الجمهور والرسالة",
+        "خطة بمراحل واضحة"
+      ],
+      "points_en": [
+        "Market and competitor analysis",
+        "Audience and message",
+        "A clear phased plan"
+      ],
+      "items": []
+    },
+    {
+      "id": "campaigns",
+      "page": "marketing",
+      "hide": false,
+      "title": "الحملات",
+      "title_en": "Campaigns",
+      "intro": "فكرة واحدة بتتنفذ على كل القنوات، من الفيلم للإعلان للسوشيال.",
+      "intro_en": "One idea delivered across every channel, from film to ads to social.",
+      "points": [
+        "الفكرة والكونسبت",
+        "التنفيذ مع فريق البروداكشن",
+        "قياس النتايج"
+      ],
+      "points_en": [
+        "Idea and concept",
+        "Execution with the production team",
+        "Measuring results"
+      ],
+      "items": []
+    }
+  ]
+}
