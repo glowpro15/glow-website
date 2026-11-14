@@ -161,6 +161,7 @@ content:
     path: content/site.json
     format: json
     fields:
+      - { name: logo, label: اللوجو, description: بيظهر فوق في كل الصفحات. يفضل PNG بخلفية شفافة أو SVG، وبالعرض., type: image }
       - { name: showreel, label: رابط الشوريل, description: رابط YouTube أو Vimeo. زرار "شغّل الشوريل" بيظهر في أول الصفحة الرئيسية لما يتحط., type: string }
       - { name: whatsapp, label: رقم الواتساب, description: بكود البلد وأرقام بس، زي 201016856331. الفورم وكل أزرار واتساب بتبعت عليه., type: string, required: true }
       - { name: phone, label: الرقم زي ما يظهر للزائر, description: زي +20 101 685 6331., type: string }

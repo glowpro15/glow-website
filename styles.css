@@ -56,8 +56,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .header.is-solid { background: var(--beige); border-bottom: 1px solid var(--line); padding-block: 10px; }
 .logo { display: inline-flex; align-items: center; text-decoration: none; direction: ltr; }
-.logo img { display: block; height: 44px; width: auto; }
-.logo img + .logo__text { display: none; }
+.logo img { display: block; height: 44px; width: auto; max-width: 46vw; object-fit: contain; }
+.logo img:not([hidden]) + .logo__text { display: none; }
 .logo__text { display: inline-flex; align-items: center; gap: 8px; font: 800 1.15rem/1 var(--display); }
 .logo__text i { width: 16px; height: 24px; background: var(--gray); clip-path: var(--wedge); }
 .logo__text b { background: var(--yellow); padding: 5px 8px; font-weight: 800; }

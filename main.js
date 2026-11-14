@@ -142,7 +142,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   <a class="skip" href="#main" id="skip"></a>
   <header class="header" id="header">
     <a class="logo" href="index.html" aria-label="Glow Production">
-      <img src="assets/logo.png" alt="" onerror="this.remove()">
+      <img id="logoImg" alt="" hidden onerror="this.dataset.bad = this.getAttribute('src'); this.hidden = true">
       <span class="logo__text"><i></i><b>GLOW</b> PRODUCTION</span>
     </a>
     <nav class="nav" id="nav"></nav>
@@ -240,6 +240,11 @@ dialog.addEventListener('close', () => $('videoFrame').replaceChildren());
 function renderChrome() {
   const ui = UI[lang];
   book($('wa'), 'unsure', ui.waHello);
+  // Logo uploaded from the dashboard; until there is one, the text logo shows.
+  const logo = safeUrl(DATA.site.logo);
+  const img = $('logoImg');
+  if (logo && img.getAttribute('src') !== logo) img.src = logo;
+  img.hidden = !logo || img.dataset.bad === logo;
   $('wa').setAttribute('aria-label', ui.wa);
   $('wa').title = ui.wa;
   $('skip').textContent = ui.skip;
