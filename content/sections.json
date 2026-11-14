@@ -1,11 +1,10 @@
 {
   "sections": [
     {
-      "id": "social",
       "page": "marketing",
-      "hide": false,
       "title": "إدارة السوشيال ميديا",
       "title_en": "Social Media Management",
+      "hide": false,
       "intro": "بنخطط المحتوى وننشره ونتابع جمهورك كل يوم.",
       "intro_en": "We plan and publish content and look after your audience every day.",
       "points": [
@@ -18,14 +17,13 @@
         "Post design and copy",
         "Community replies and reports"
       ],
-      "items": []
+      "id": "social"
     },
     {
-      "id": "ads",
       "page": "marketing",
-      "hide": false,
       "title": "الإعلانات الرقمية",
       "title_en": "Digital Ads",
+      "hide": false,
       "intro": "إعلانات مدفوعة على المنصات اللي جمهورك موجود عليها، وبتتقاس بالنتيجة.",
       "intro_en": "Paid ads on the platforms your audience uses, measured by results.",
       "points": [
@@ -38,14 +36,13 @@
         "Ad testing and optimization",
         "Clear reports"
       ],
-      "items": []
+      "id": "ads"
     },
     {
-      "id": "branding",
       "page": "marketing",
-      "hide": false,
       "title": "البراندينج",
       "title_en": "Branding",
+      "hide": false,
       "intro": "نبني شكل البراند وصوته عشان الناس تفتكره.",
       "intro_en": "We build how your brand looks and sounds so people remember it.",
       "points": [
@@ -58,14 +55,13 @@
         "Brand guidelines",
         "Tone of voice"
       ],
-      "items": []
+      "id": "branding"
     },
     {
-      "id": "strategy",
       "page": "marketing",
-      "hide": false,
       "title": "استراتيجية الماركتينج",
       "title_en": "Marketing Strategy",
+      "hide": false,
       "intro": "نحدد السوق والجمهور والرسالة قبل ما نصرف جنيه.",
       "intro_en": "We define the market, audience and message before spending a pound.",
       "points": [
@@ -78,14 +74,13 @@
         "Audience and message",
         "A clear phased plan"
       ],
-      "items": []
+      "id": "strategy"
     },
     {
-      "id": "campaigns",
       "page": "marketing",
-      "hide": false,
       "title": "الحملات",
       "title_en": "Campaigns",
+      "hide": false,
       "intro": "فكرة واحدة بتتنفذ على كل القنوات، من الفيلم للإعلان للسوشيال.",
       "intro_en": "One idea delivered across every channel, from film to ads to social.",
       "points": [
@@ -98,7 +93,12 @@
         "Execution with the production team",
         "Measuring results"
       ],
-      "items": []
+      "id": "campaigns"
+    },
+    {
+      "page": "production",
+      "title": "تجربة",
+      "hide": true
     }
   ]
 }
