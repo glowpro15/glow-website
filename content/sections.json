@@ -94,11 +94,6 @@
         "Measuring results"
       ],
       "id": "campaigns"
-    },
-    {
-      "page": "production",
-      "title": "تجربة",
-      "hide": true
     }
   ]
 }
