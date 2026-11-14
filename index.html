@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="title.home">Glow Production | ماركتينج وبروداكشن</title>
+  <meta name="description" content="وكالة ماركتينج وبيت إنتاج تحت سقف واحد.">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23f7d100%22/%3E%3Cpath d=%22M9 6l16 10-16 10z%22 fill=%22%23414141%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+  <main id="main">
+    <section class="hero" id="top" data-edit="site">
+      <div class="hero__mark" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></div>
+      <div class="hero__inner">
+        <p class="eyebrow" data-i18n="hero.eyebrow">ماركتينج × بروداكشن</p>
+        <h1 data-i18n="hero.title">نخلّي براندك ينوّر.</h1>
+        <div class="hero__foot">
+          <p class="lead" data-i18n="hero.lead">وكالة ماركتينج وبيت إنتاج تحت سقف واحد. الاستراتيجية والفكرة والتصوير والنشر عند فريق واحد.</p>
+          <div class="hero__cta">
+            <a class="btn" href="production.html" data-i18n="cta.production">البروداكشن</a>
+            <a class="btn btn--ghost" href="marketing.html" data-i18n="cta.marketing">الماركتينج</a>
+          </div>
+        </div>
+        <button class="reel" type="button" id="showreel" hidden>
+          <span class="reel__icon" aria-hidden="true"></span>
+          <span data-i18n="cta.reel">شغّل الشوريل</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Sections below fill from content/*.json and stay hidden while empty. -->
+    <section class="clients" id="clients" aria-label="Clients" data-edit="home" hidden>
+      <div class="clients__track" id="clientsTrack"></div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section__head reveal">
+        <h2 data-i18n="doors.title">محتاج إيه؟</h2>
+        <p class="lead" data-i18n="doors.lead">اختار اللي يناسبك، ولو محتاج الاتنين هتلاقيهم عند فريق واحد.</p>
+      </div>
+      <div class="doors reveal" id="doors"></div>
+    </section>
+
+    <section class="section section--tight" id="work" data-edit="works" hidden>
+      <div class="section__head reveal">
+        <h2 data-i18n="work.title">الشغل بيتكلم.</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter work"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="section section--dark">
+      <h2 class="reveal" data-i18n="steps.title">بنشتغل إزاي؟</h2>
+      <ol class="steps reveal">
+        <li><b data-i18n="step.1">نفهم</b><span data-i18n="step.1d">البراند والجمهور والهدف</span></li>
+        <li><b data-i18n="step.2">نبتكر</b><span data-i18n="step.2d">الفكرة والسكريبت والخطة</span></li>
+        <li><b data-i18n="step.3">ننفّذ</b><span data-i18n="step.3d">تصوير ومونتاج وتصميم</span></li>
+        <li><b data-i18n="step.4">ننشر ونقيس</b><span data-i18n="step.4d">ميديا ونتايج وتحسين</span></li>
+      </ol>
+    </section>
+
+    <section class="section section--yellow" id="proof" data-edit="home" hidden>
+      <div class="stats reveal" id="stats"></div>
+      <figure class="quote reveal" id="quote">
+        <blockquote id="quoteText"></blockquote>
+        <figcaption id="quoteBy"></figcaption>
+      </figure>
+    </section>
+
+    <section class="band section--dark">
+      <h2 data-i18n="band.title">عندك فكرة؟ ابعتها.</h2>
+      <a class="btn" href="contact.html" data-i18n="cta.contact">تواصل معنا</a>
+    </section>
+  </main>
+  <script src="main.js"></script>
+</body>
+</html>

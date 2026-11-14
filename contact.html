@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="title.contact">تواصل معنا | Glow Production</title>
+  <meta name="description" content="ابعت تفاصيل مشروعك لفريق Glow Production.">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23f7d100%22/%3E%3Cpath d=%22M9 6l16 10-16 10z%22 fill=%22%23414141%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="contact">
+  <main id="main">
+    <section class="page-hero">
+      <div class="page-hero__shape" aria-hidden="true"></div>
+      <h1 data-i18n="contact.title">تواصل معنا</h1>
+      <p class="lead" data-i18n="contact.lead">اكتب اللي تعرفه، ولو لسه مش واضح هنوضحه سوا.</p>
+    </section>
+
+    <section class="section section--dark brief">
+      <div class="brief__intro">
+        <dl class="contact-list" data-edit="site">
+          <div><dt data-i18n="contact.phone">موبايل وواتساب</dt><dd><a id="contactPhone" dir="ltr"></a></dd></div>
+          <div><dt data-i18n="contact.email">الإيميل</dt><dd><a id="contactEmail" dir="ltr"></a></dd></div>
+          <div><dt data-i18n="contact.address">العنوان</dt><dd><a class="address" id="contactAddress" target="_blank" rel="noopener"></a></dd></div>
+          <div><dt data-i18n="contact.social">تابعنا</dt><dd class="social" id="contactSocial"></dd></div>
+        </dl>
+      </div>
+      <form class="form" id="form" novalidate>
+        <label><span data-i18n="f.name">الاسم</span><input name="name" autocomplete="name" required></label>
+        <label><span data-i18n="f.company">الشركة</span><input name="company" autocomplete="organization"></label>
+        <label class="form__wide"><span data-i18n="f.phone">رقم الموبايل أو واتساب</span><input name="phone" type="tel" dir="ltr" autocomplete="tel" required></label>
+        <label class="form__wide"><span data-i18n="f.type">محتاج إيه؟</span><select name="type" id="typeSelect"></select></label>
+        <label class="form__wide"><span data-i18n="f.notes">احكيلنا عن المشروع</span><textarea name="notes" rows="4"></textarea></label>
+        <div class="form__wide form__end">
+          <button class="btn" type="submit" data-i18n="f.send">ابعت على واتساب</button>
+          <p class="form__msg" id="formMsg" role="status"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+  <script src="main.js"></script>
+</body>
+</html>

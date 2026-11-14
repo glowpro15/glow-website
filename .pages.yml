@@ -1,0 +1,134 @@
+# Dashboard (Pages CMS) setup: each entry below is one page in the dashboard
+# and edits one file in content/. Uploaded photos go to images/.
+media:
+  input: images
+  output: /images
+
+content:
+  - name: works
+    label: الأعمال
+    type: file
+    path: content/works.json
+    format: json
+    fields:
+      - name: works
+        label: المشاريع
+        description: كل مشروع بيظهر كارت في قسم "الشغل بيتكلم" في الصفحة الرئيسية. اسحب المشاريع لتغيير الترتيب.
+        type: object
+        list: true
+        fields:
+          - { name: title, label: اسم المشروع, type: string, required: true }
+          - { name: title_en, label: اسم المشروع بالإنجليزي (اختياري), type: string }
+          - { name: client, label: اسم العميل, type: string }
+          - name: category
+            label: النوع
+            type: select
+            required: true
+            options:
+              values:
+                - { value: reels, label: ريلز }
+                - { value: social, label: إدارة السوشيال ميديا }
+                - { value: ads, label: الإعلانات الرقمية }
+                - { value: branding, label: البراندينج }
+                - { value: strategy, label: استراتيجية الماركتينج }
+                - { value: campaigns, label: الحملات }
+          - { name: image, label: الصورة, description: صورة عرضية، عرضها 1600 بيكسل على الأقل. لو المشروع فيديو YouTube ومفيش صورة، الموقع بياخد صورة الفيديو لوحده., type: image }
+          - { name: video, label: رابط الفيديو (اختياري), description: رابط YouTube أو Vimeo أو Instagram أو TikTok كامل زي ما هو في المتصفح., type: string }
+          - { name: result, label: النتيجة (اختياري), description: زي "+40% مبيعات"., type: string }
+          - { name: result_en, label: النتيجة بالإنجليزي (اختياري), type: string }
+          - { name: big, label: كارت كبير, description: بيخلي المشروع ياخد مساحة أكبر. يفضل مشروع أو اتنين بس., type: boolean }
+
+  - name: models
+    label: الموديلز
+    type: file
+    path: content/models.json
+    format: json
+    fields:
+      - name: models
+        label: الموديلز
+        description: كل موديل بيظهر في صفحة البروداكشن، وزرار "احجز" بيبعت اسمه في رسالة واتساب. لازم موافقة مكتوبة من الموديل قبل النشر.
+        type: object
+        list: true
+        fields:
+          - { name: name, label: الاسم, type: string, required: true }
+          - { name: photo, label: الصورة, description: صورة طولية، عرضها 1000 بيكسل على الأقل., type: image }
+          - { name: work, label: نوع الشغل, description: زي فاشن أو إعلانات., type: string }
+          - { name: work_en, label: نوع الشغل بالإنجليزي (اختياري), type: string }
+
+  - name: reels
+    label: الريلز
+    type: file
+    path: content/reels.json
+    format: json
+    fields:
+      - name: reels
+        label: الريلز
+        description: بتظهر في صفحة البروداكشن، والزائر بيشغّلها من الموقع.
+        type: object
+        list: true
+        fields:
+          - { name: url, label: رابط الريل, description: رابط Instagram أو TikTok أو YouTube Shorts كامل., type: string, required: true }
+          - { name: title, label: العنوان (اختياري), type: string }
+          - { name: title_en, label: العنوان بالإنجليزي (اختياري), type: string }
+          - { name: cover, label: صورة الغلاف (اختياري), description: مهمة لريلز Instagram وTikTok عشان الكارت ما يبقاش فاضي., type: image }
+
+  - name: studio
+    label: الاستوديو
+    type: file
+    path: content/studio.json
+    format: json
+    fields:
+      - { name: photos, label: صور الاستوديو, description: من 1 لـ4 صور. أول صورة بتظهر كبيرة., type: image, list: true }
+      - { name: cameras, label: الكاميرات, type: string }
+      - { name: cameras_en, label: الكاميرات بالإنجليزي (اختياري), type: string }
+      - { name: lighting, label: الإضاءة, type: string }
+      - { name: lighting_en, label: الإضاءة بالإنجليزي (اختياري), type: string }
+      - { name: editing, label: المونتاج, type: string }
+      - { name: editing_en, label: المونتاج بالإنجليزي (اختياري), type: string }
+      - { name: sound, label: الصوت, type: string }
+      - { name: sound_en, label: الصوت بالإنجليزي (اختياري), type: string }
+
+  - name: home
+    label: الرئيسية (العملاء والأرقام)
+    type: file
+    path: content/home.json
+    format: json
+    fields:
+      - name: clients
+        label: العملاء
+        description: لوجوهات بتتحرك في شريط أصفر تحت أول الصفحة. اعرض بس العملاء اللي موافقين.
+        type: object
+        list: true
+        fields:
+          - { name: name, label: اسم العميل, type: string, required: true }
+          - { name: logo, label: اللوجو (اختياري), description: PNG بخلفية شفافة أو SVG. من غير لوجو بيظهر الاسم مكتوب., type: image }
+      - name: stats
+        label: الأرقام
+        description: زي "7 سنين خبرة". يفضل من 2 لـ4 أرقام.
+        type: object
+        list: true
+        fields:
+          - { name: number, label: الرقم, description: زي 7 أو +120., type: string, required: true }
+          - { name: label, label: الوصف, type: string, required: true }
+          - { name: label_en, label: الوصف بالإنجليزي (اختياري), type: string }
+      - { name: quote, label: رأي عميل, description: جملتين بالكتير., type: text }
+      - { name: quote_en, label: رأي العميل بالإنجليزي (اختياري), type: text }
+      - { name: quote_by, label: صاحب الرأي, description: الاسم والمنصب والشركة., type: string }
+
+  - name: site
+    label: بيانات التواصل والشوريل
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - { name: showreel, label: رابط الشوريل, description: رابط YouTube أو Vimeo. زرار "شغّل الشوريل" بيظهر في أول الصفحة الرئيسية لما يتحط., type: string }
+      - { name: whatsapp, label: رقم الواتساب, description: بكود البلد وأرقام بس، زي 201016856331. الفورم وكل أزرار واتساب بتبعت عليه., type: string, required: true }
+      - { name: phone, label: الرقم زي ما يظهر للزائر, description: زي +20 101 685 6331., type: string }
+      - { name: email, label: الإيميل, type: string }
+      - { name: address, label: العنوان, type: string }
+      - { name: address_en, label: العنوان بالإنجليزي, type: string }
+      - { name: map, label: رابط الخريطة, description: رابط المكان على Google Maps., type: string }
+      - { name: instagram, label: Instagram, type: string }
+      - { name: facebook, label: Facebook, type: string }
+      - { name: tiktok, label: TikTok, type: string }
+      - { name: youtube, label: YouTube (اختياري), type: string }

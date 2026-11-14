@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="title.production">البروداكشن | Glow Production</title>
+  <meta name="description" content="الاستوديو والموديلز والريلز من Glow Production.">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23f7d100%22/%3E%3Cpath d=%22M9 6l16 10-16 10z%22 fill=%22%23414141%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="production">
+  <main id="main">
+    <section class="page-hero section--dark">
+      <div class="page-hero__shape" aria-hidden="true"></div>
+      <p class="eyebrow" data-i18n="prod.tag">Production</p>
+      <h1 data-i18n="prod.title">البروداكشن</h1>
+      <p class="lead" data-i18n="prod.lead">استوديو مجهز، وموديلز للتصوير، وريلز جاهزة للنشر.</p>
+    </section>
+
+    <nav class="subnav" id="subnav" aria-label="Production"></nav>
+
+    <section class="section studio" id="studio" data-edit="studio">
+      <div class="studio__art reveal" id="studioPhotos"></div>
+      <div class="studio__copy reveal">
+        <p class="eyebrow" data-i18n="studio.tag">الاستوديو</p>
+        <h2 data-i18n="studio.title">الإنتاج عندنا، مش عند حد تاني.</h2>
+        <dl id="gear" hidden>
+          <div data-gear="cameras"><dt data-i18n="studio.cam">الكاميرات</dt><dd></dd></div>
+          <div data-gear="lighting"><dt data-i18n="studio.light">الإضاءة</dt><dd></dd></div>
+          <div data-gear="editing"><dt data-i18n="studio.edit">المونتاج</dt><dd></dd></div>
+          <div data-gear="sound"><dt data-i18n="studio.sound">الصوت</dt><dd></dd></div>
+        </dl>
+        <a class="btn" id="studioBook" href="contact.html?type=studio" data-i18n="studio.cta">احجز الاستوديو</a>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="models" data-edit="models" hidden>
+      <div class="section__head reveal">
+        <h2 data-i18n="models.title">الموديلز</h2>
+        <a class="btn btn--ghost" href="contact.html?type=models" data-i18n="models.cta">اطلب موديل</a>
+      </div>
+      <div class="models" id="modelsGrid"></div>
+    </section>
+
+    <section class="section section--dark" id="reels" data-edit="reels" hidden>
+      <div class="section__head reveal">
+        <h2 data-i18n="reels.title">الريلز</h2>
+        <a class="btn" href="contact.html?type=reels" data-i18n="reels.cta">عاوز ريلز لبراندك</a>
+      </div>
+      <div class="reels" id="reelsGrid"></div>
+    </section>
+  </main>
+  <script src="main.js"></script>
+</body>
+</html>
