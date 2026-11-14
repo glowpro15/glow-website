@@ -202,11 +202,27 @@ function book(link, type, text) {
   link.rel = on ? 'noopener' : '';
 }
 
+// YouTube's sharpest widescreen thumbnail first; smaller ones only when a video has no HD version.
+const ytThumbs = (id) => ['maxresdefault', 'hq720', 'mqdefault'].map((n) => `https://i.ytimg.com/vi/${id}/${n}.jpg`);
+// A card image: an uploaded photo (one source) or a list of thumbnails tried in order.
+// YouTube answers a missing size with a 120px grey placeholder, so a tiny image also moves on.
+function cardImg(sources, alt = '') {
+  const [first, ...rest] = Array.isArray(sources) ? sources : [sources];
+  const next = rest.length ? ` data-next="${esc(rest.join(' '))}" onerror="nextThumb(this)" onload="if (this.naturalWidth <= 120) nextThumb(this)"` : '';
+  return `<img class="card__img" src="${esc(first)}" alt="${esc(alt)}" loading="lazy"${next}>`;
+}
+function nextThumb(img) {
+  const [next, ...rest] = (img.dataset.next || '').split(' ').filter(Boolean);
+  if (!next) { img.onload = null; return; }
+  img.dataset.next = rest.join(' ');
+  img.src = next;
+}
+
 // Turns a YouTube, Vimeo, Instagram or TikTok link into a player. Anything else opens in a new tab.
 function player(url) {
   let m;
   if ((m = url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/))) {
-    return { src: `https://www.youtube-nocookie.com/embed/${m[1]}?autoplay=1&rel=0`, tall: /\/shorts\//.test(url), thumb: `https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg` };
+    return { src: `https://www.youtube-nocookie.com/embed/${m[1]}?autoplay=1&rel=0`, tall: /\/shorts\//.test(url), thumb: ytThumbs(m[1]) };
   }
   if ((m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/))) return { src: `https://player.vimeo.com/video/${m[1]}?autoplay=1` };
   if ((m = url.match(/instagram\.com\/(?:[\w.]+\/)?(?:reels?|p|tv)\/([\w-]+)/))) return { src: `https://www.instagram.com/p/${m[1]}/embed/`, tall: true };
@@ -352,7 +368,7 @@ function mediaCard(item, n, { tag = '', meta = [], wide = false } = {}) {
   const info = meta.filter(Boolean).map(esc).join(' · ');
   return `
     <article class="card card--${n % 3 === 1 ? 'yellow' : 'dark'}${image ? ' card--photo' : ''}${wide ? ' card--wide' : ''}" style="--poly:var(--${SHAPES[n % 4]})">
-      ${image ? `<img class="card__img" src="${esc(image)}" alt="" loading="lazy">` : '<span class="card__art"></span>'}
+      ${image ? cardImg(image) : '<span class="card__art"></span>'}
       <div class="card__body">
         ${tag ? `<span class="card__cat">${esc(tag)}</span>` : ''}
         ${title ? `<h3>${esc(title)}</h3>` : ''}
@@ -456,7 +472,7 @@ function renderProduction() {
     const title = tx(r, 'title');
     return `
       <button class="reel-card reel-card--${n % 2 ? 'beige' : 'yellow'}${cover ? ' reel-card--photo' : ''}" type="button" data-video="${esc(url)}" aria-label="${esc(title ? `${ui.play}: ${title}` : ui.play)}">
-        ${cover ? `<img class="card__img" src="${esc(cover)}" alt="" loading="lazy">` : ''}
+        ${cover ? cardImg(cover) : ''}
         <span class="reel__icon" aria-hidden="true"></span>
         ${title ? `<span class="reel-card__title">${esc(title)}</span>` : ''}
       </button>`;
