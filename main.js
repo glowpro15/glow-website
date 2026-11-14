@@ -120,7 +120,8 @@ const list = (value) => (Array.isArray(value) ? value : []);
 // Edit mode: the owner opens the site once with ?edit to show a pencil on every editable part
 // (it is remembered on that device; ?edit=off turns it off). Pencils only open the dashboard,
 // which asks for the GitHub sign-in, so seeing them gives no one access.
-const DASHBOARD = 'https://app.pagescms.org';
+// Each pencil opens its own section: the name matches an entry in .pages.yml.
+const DASHBOARD = 'https://app.pagescms.org/glowpro15/glow-website/main/file';
 const EDITING = (() => {
   const q = new URLSearchParams(location.search).get('edit');
   try {
@@ -176,7 +177,7 @@ document.body.insertAdjacentHTML('beforeend', `
 if (EDITING) {
   root.classList.add('is-editing');
   each('[data-edit]', (el) => {
-    el.insertAdjacentHTML('afterbegin', `<a class="edit-pin" href="${DASHBOARD}" target="_blank" rel="noopener">✎ عدّل ${EDIT_LABELS[el.dataset.edit]}</a>`);
+    el.insertAdjacentHTML('afterbegin', `<a class="edit-pin" href="${DASHBOARD}/${el.dataset.edit}" target="_blank" rel="noopener">✎ عدّل ${EDIT_LABELS[el.dataset.edit]}</a>`);
   });
   document.body.insertAdjacentHTML('beforeend', '<div class="edit-bar">وضع التعديل شغال <a href="?edit=off">اقفله</a></div>');
 }
