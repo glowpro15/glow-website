@@ -335,3 +335,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .extra .section-media { margin-top: clamp(24px, 4vw, 48px); }
 .is-editing #extraSections, .is-editing #services { padding-top: 60px; }
 .is-editing #extraSections.is-empty::after { content: "مفيش أقسام إضافية لسه. دوس على القلم عشان تضيف قسم زي البودكاست."; }
+
+/* Note shown while models or reels have no content yet */
+.empty-note { grid-column: 1 / -1; max-width: 36em; color: var(--muted); font-size: 1.1rem; }
+.empty-note .social { margin-top: 12px; }

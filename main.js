@@ -56,6 +56,8 @@ const UI = {
     waName: 'الاسم', waCompany: 'الشركة', waPhone: 'الموبايل', waService: 'الخدمة', waNotes: 'التفاصيل',
     wa: 'كلمنا على واتساب', book: 'احجز', play: 'شغّل الفيديو',
     waHello: 'أهلًا، عاوز أعرف تفاصيل أكتر عن خدماتكم.', waStudio: 'أهلًا، عاوز أحجز الاستوديو.', waModel: 'أهلًا، عاوز أحجز موديل',
+    modelsSoon: 'بنجهّز صفحة الموديلز. ابعتلنا نوع التصوير ونرشحلك الموديل المناسب.',
+    reelsSoon: 'الريلز جاية هنا قريب. لحد ما تتضاف، شوف أحدث شغلنا على:',
   },
   en: {
     skip: 'Skip to content', contact: 'Contact us', all: 'All', unsure: 'Not sure yet', ask: 'Request this service',
@@ -65,6 +67,8 @@ const UI = {
     waName: 'Name', waCompany: 'Company', waPhone: 'Mobile', waService: 'Service', waNotes: 'Details',
     wa: 'Chat on WhatsApp', book: 'Book', play: 'Play video',
     waHello: "Hi, I'd like to know more about your services.", waStudio: "Hi, I'd like to book the studio.", waModel: "Hi, I'd like to book a model",
+    modelsSoon: "We're preparing our models page. Tell us about your shoot and we'll suggest the right model.",
+    reelsSoon: 'Reels are coming here soon. Until then, see our latest work on:',
   },
 };
 
@@ -83,14 +87,9 @@ function sectionsFor(pageId) {
   }).filter((s) => s.page === pageId && !s.hide && s.title
     && (s.intro || list(s.points).length || list(s.items).length));
 }
-// Models and reels appear in the menus only once they have content, like their sections.
-const hasContent = {
-  models: () => list(DATA.models.models).some((m) => m.name || m.photo),
-  reels: () => list(DATA.reels.reels).some((r) => safeUrl(r.url)),
-};
 const groups = () => NAV.map((g) => ({
   ...g,
-  items: [...g.items.filter((i) => !hasContent[i.id] || hasContent[i.id]()), ...sectionsFor(g.id).map((s) => ({
+  items: [...g.items, ...sectionsFor(g.id).map((s) => ({
     id: s.id, href: `${g.href}#${s.id}`, label: { ar: s.title, en: s.title_en || s.title },
   }))],
 }));
@@ -449,8 +448,10 @@ function renderProduction() {
   book($('studioBook'), 'studio', ui.waStudio);
 
   const models = list(DATA.models.models).filter((m) => m.name || m.photo);
-  showIf($('models'), models.length > 0);
-  $('modelsGrid').innerHTML = models.map((m, n) => {
+  // Models and reels always show; until they have content, a short note stands in.
+  $('models').hidden = false;
+  $('modelsGrid').innerHTML = models.length ? '' : `<p class="empty-note">${ui.modelsSoon}</p>`;
+  $('modelsGrid').innerHTML += models.map((m, n) => {
     const photo = safeUrl(m.photo);
     return `
       <article class="model model--${n % 3 === 1 ? 'yellow' : 'dark'}${photo ? ' model--photo' : ''}" style="--poly:var(--${SHAPES[n % 4]})">
@@ -465,8 +466,12 @@ function renderProduction() {
   });
 
   const reels = list(DATA.reels.reels).filter((r) => safeUrl(r.url));
-  showIf($('reels'), reels.length > 0);
-  $('reelsGrid').innerHTML = reels.map((r, n) => {
+  $('reels').hidden = false;
+  const social = [['Instagram', DATA.site.instagram], ['TikTok', DATA.site.tiktok], ['YouTube', DATA.site.youtube]]
+    .map(([name, url]) => [name, safeUrl(url)]).filter(([, url]) => url);
+  $('reelsGrid').innerHTML = reels.length ? '' : `<p class="empty-note">${ui.reelsSoon}
+    <span class="social">${social.map(([name, url]) => `<a href="${esc(url)}" target="_blank" rel="noopener">${name}</a>`).join('')}</span></p>`;
+  $('reelsGrid').innerHTML += reels.map((r, n) => {
     const url = safeUrl(r.url);
     const cover = safeUrl(r.cover) || player(url)?.thumb || '';
     const title = tx(r, 'title');
