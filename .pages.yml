@@ -2,7 +2,7 @@
 # and edits one file in content/. Uploaded photos go to images/.
 media:
   input: images
-  output: /images
+  output: images
 
 content:
   - name: works
