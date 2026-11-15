@@ -233,16 +233,24 @@ const dialog = $('video');
 // Short clips load and play only while on screen, and pause when scrolled away.
 // Visitors who ask for less motion see the cover and play a clip by tapping it.
 const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const onScreenClips = new Set();
 const clipWatcher = 'IntersectionObserver' in window && !calm
   ? new IntersectionObserver((entries) => entries.forEach(({ target, isIntersecting }) => {
     if (isIntersecting) {
+      onScreenClips.add(target);
       if (!target.getAttribute('src')) target.src = target.dataset.clipSrc;
       target.play().catch(() => {});
     } else {
+      onScreenClips.delete(target);
       target.pause();
     }
   }), { rootMargin: '200px 0px' })
   : null;
+// Coming back to the tab restarts the clips in view (browsers pause them in the background).
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  onScreenClips.forEach((v) => { if (v.isConnected) v.play().catch(() => {}); else onScreenClips.delete(v); });
+});
 function watchClips(box) {
   if (clipWatcher) box.querySelectorAll('video[data-clip-src]').forEach((v) => clipWatcher.observe(v));
 }
