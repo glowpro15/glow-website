@@ -1,5 +1,7 @@
 {
-  "photos": [
-    "images/_MG_4164.jpg"
+  "media": [
+    {
+      "image": "images/_MG_4164.jpg"
+    }
   ]
 }

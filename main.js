@@ -36,7 +36,7 @@ const EN = {
   'band.title': 'Got an idea? Send it.',
   'prod.tag': 'Production', 'prod.title': 'Production', 'prod.lead': 'An equipped studio, models for your shoot, and reels ready to publish.',
   'studio.tag': 'Studio', 'studio.title': 'Production stays in-house.', 'studio.cta': 'Book the studio',
-  'studio.cam': 'Cameras', 'studio.light': 'Lighting', 'studio.edit': 'Editing', 'studio.sound': 'Sound',
+  'studio.lead': 'Different sets inside the studio, ready for your ad or reels. Tap any set to see it larger.',
   'models.title': 'Models', 'models.cta': 'Request a model',
   'reels.title': 'Reels', 'reels.cta': 'Reels for my brand',
   'mkt.tag': 'Marketing', 'mkt.title': 'Marketing', 'mkt.lead': 'Five services that work together, from defining the message to measuring the result.',
@@ -54,7 +54,7 @@ const UI = {
     sent: 'فتحنالك واتساب. دوس إرسال هناك عشان الرسالة توصلنا.',
     noNumber: 'رقم الواتساب لسه متضافش للموقع، فالرسالة متبعتتش.',
     waName: 'الاسم', waCompany: 'الشركة', waPhone: 'الموبايل', waService: 'الخدمة', waNotes: 'التفاصيل',
-    wa: 'كلمنا على واتساب', book: 'احجز', play: 'شغّل الفيديو',
+    wa: 'كلمنا على واتساب', book: 'احجز', play: 'شغّل الفيديو', view: 'كبّر الصورة',
     waHello: 'أهلًا، عاوز أعرف تفاصيل أكتر عن خدماتكم.', waStudio: 'أهلًا، عاوز أحجز الاستوديو.', waModel: 'أهلًا، عاوز أحجز موديل',
     modelsSoon: 'بنجهّز صفحة الموديلز. ابعتلنا نوع التصوير ونرشحلك الموديل المناسب.',
     reelsSoon: 'الريلز جاية هنا قريب. لحد ما تتضاف، شوف أحدث شغلنا على:',
@@ -65,7 +65,7 @@ const UI = {
     sent: 'WhatsApp is open. Press send there so your message reaches us.',
     noNumber: 'The WhatsApp number has not been added to the site yet, so nothing was sent.',
     waName: 'Name', waCompany: 'Company', waPhone: 'Mobile', waService: 'Service', waNotes: 'Details',
-    wa: 'Chat on WhatsApp', book: 'Book', play: 'Play video',
+    wa: 'Chat on WhatsApp', book: 'Book', play: 'Play video', view: 'View photo',
     waHello: "Hi, I'd like to know more about your services.", waStudio: "Hi, I'd like to book the studio.", waModel: "Hi, I'd like to book a model",
     modelsSoon: "We're preparing our models page. Tell us about your shoot and we'll suggest the right model.",
     reelsSoon: 'Reels are coming here soon. Until then, see our latest work on:',
@@ -230,6 +230,19 @@ function player(url) {
 }
 
 const dialog = $('video');
+// A photo shown large in the same dialog as the videos.
+function openPhoto(src, alt) {
+  const link = safeUrl(src);
+  if (!link) return;
+  const img = document.createElement('img');
+  img.src = link;
+  img.alt = alt || '';
+  $('videoFrame').replaceChildren(img);
+  dialog.classList.remove('dialog--tall');
+  dialog.classList.add('dialog--photo');
+  dialog.showModal();
+}
+
 function openVideo(url) {
   const link = safeUrl(url);
   if (!link) return;
@@ -241,12 +254,15 @@ function openVideo(url) {
   frame.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
   frame.allowFullscreen = true;
   $('videoFrame').replaceChildren(frame);
+  dialog.classList.remove('dialog--photo');
   dialog.classList.toggle('dialog--tall', Boolean(p.tall));
   dialog.showModal();
 }
 document.addEventListener('click', (e) => {
   const trigger = e.target.closest('[data-video]');
   if (trigger) openVideo(trigger.dataset.video);
+  const photo = e.target.closest('[data-photo]');
+  if (photo) openPhoto(photo.dataset.photo, photo.getAttribute('aria-label'));
 });
 $('videoClose').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
@@ -434,17 +450,22 @@ function renderProduction() {
   const ui = UI[lang];
 
   const st = DATA.studio;
-  const photos = list(st.photos).map(safeUrl).filter(Boolean).slice(0, 4);
-  $('studioPhotos').classList.toggle('studio__art--photos', photos.length > 0);
-  $('studioPhotos').innerHTML = photos.map((src) => `<img src="${esc(src)}" alt="" loading="lazy">`).join('');
-  let gear = 0;
-  each('[data-gear]', (row) => {
-    const value = tx(st, row.dataset.gear);
-    row.querySelector('dd').textContent = value;
-    row.hidden = !value;
-    if (value) gear += 1;
-  });
-  $('gear').hidden = !gear;
+  // Studio photos and videos, any number: the first sits large beside the text, the rest in a gallery below.
+  const media = [...list(st.media), ...list(st.photos).map((image) => ({ image }))]
+    .map((m) => ({ ...m, image: safeUrl(m.image), video: safeUrl(m.video) }))
+    .filter((m) => m.image || m.video);
+  const tile = (m, big = false) => {
+    const thumb = m.image || (m.video && player(m.video)?.thumb) || '';
+    const title = tx(m, 'title');
+    const action = m.video ? `data-video="${esc(m.video)}"` : `data-photo="${esc(m.image)}"`;
+    return `<button class="studio-tile${big ? ' studio-tile--big' : ''}" type="button" ${action} aria-label="${esc(title || (m.video ? ui.play : ui.view))}">
+      ${thumb ? cardImg(thumb, title) : ''}${m.video ? '<span class="reel__icon" aria-hidden="true"></span>' : ''}
+      ${title ? `<span class="studio-tile__title">${esc(title)}</span>` : ''}</button>`;
+  };
+  $('studioPhotos').classList.toggle('studio__art--media', media.length > 0);
+  $('studioPhotos').innerHTML = media.length ? tile(media[0], true) : '';
+  $('studioGallery').innerHTML = media.slice(1).map((m) => tile(m)).join('');
+  $('studioGallery').hidden = media.length < 2;
   book($('studioBook'), 'studio', ui.waStudio);
 
   const models = list(DATA.models.models).filter((m) => m.name || m.photo);

@@ -118,15 +118,27 @@ content:
     path: content/studio.json
     format: json
     fields:
-      - { name: photos, label: صور الاستوديو, description: من 1 لـ4 صور. أول صورة بتظهر كبيرة., type: image, list: true }
-      - { name: cameras, label: الكاميرات, type: string }
-      - { name: cameras_en, label: الكاميرات بالإنجليزي (اختياري), type: string }
-      - { name: lighting, label: الإضاءة, type: string }
-      - { name: lighting_en, label: الإضاءة بالإنجليزي (اختياري), type: string }
-      - { name: editing, label: المونتاج, type: string }
-      - { name: editing_en, label: المونتاج بالإنجليزي (اختياري), type: string }
-      - { name: sound, label: الصوت, type: string }
-      - { name: sound_en, label: الصوت بالإنجليزي (اختياري), type: string }
+      - name: media
+        label: لوكيشنز الاستوديو
+        description: "صورة أو فيديو لكل لوكيشن جوه الاستوديو، وأي عدد. أول واحد بيظهر كبير جنب كلام الاستوديو، والباقي في معرض تحته. اسحبهم لتغيير الترتيب."
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: اسم اللوكيشن
+            description: "بيظهر على الصورة، زي: ركن المطبخ أو الخلفية البيضا."
+            type: string
+          - name: title_en
+            label: اسم اللوكيشن بالإنجليزي (اختياري)
+            type: string
+          - name: image
+            label: الصورة
+            description: "عرضية 4:3، يعني 1600×1200. للفيديو اختيارية، لأن صورة YouTube بتظهر لوحدها."
+            type: image
+          - name: video
+            label: رابط الفيديو (اختياري)
+            description: "YouTube أو Vimeo أو Instagram أو TikTok."
+            type: string
 
   - name: home
     label: الرئيسية (العملاء والأرقام)
