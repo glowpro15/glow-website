@@ -344,3 +344,4 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .empty-note .social { margin-top: 12px; }
 
 @media (max-width: 860px) { .studio__gallery { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .studio-tile__title { bottom: 8px; inset-inline-start: 8px; padding: 4px 8px; font-size: .8rem; } }
