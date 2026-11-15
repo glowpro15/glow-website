@@ -135,9 +135,15 @@ content:
             label: الصورة
             description: "عرضية 4:3، يعني 1600×1200. للفيديو اختيارية، لأن صورة YouTube بتظهر لوحدها."
             type: image
+          - name: clip
+            label: فيديو قصير يشتغل لوحده (MP4)
+            description: "مقطع من 5 لـ 10 ثواني من غير صوت، وأقل من 2 ميجا. بيشتغل لوحده ويعيد نفسه مكان الصورة، والصورة بتبقى غلافه لحد ما يحمّل."
+            type: file
+            options:
+              extensions: [mp4, webm]
           - name: video
-            label: رابط الفيديو (اختياري)
-            description: "YouTube أو Vimeo أو Instagram أو TikTok."
+            label: رابط فيديو طويل (اختياري)
+            description: "YouTube أو Vimeo أو Instagram أو TikTok. بيشتغل لما الزائر يدوس."
             type: string
 
   - name: home

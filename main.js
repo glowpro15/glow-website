@@ -230,6 +230,36 @@ function player(url) {
 }
 
 const dialog = $('video');
+// Short clips load and play only while on screen, and pause when scrolled away.
+// Visitors who ask for less motion see the cover and play a clip by tapping it.
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clipWatcher = 'IntersectionObserver' in window && !calm
+  ? new IntersectionObserver((entries) => entries.forEach(({ target, isIntersecting }) => {
+    if (isIntersecting) {
+      if (!target.getAttribute('src')) target.src = target.dataset.clipSrc;
+      target.play().catch(() => {});
+    } else {
+      target.pause();
+    }
+  }), { rootMargin: '200px 0px' })
+  : null;
+function watchClips(box) {
+  if (clipWatcher) box.querySelectorAll('video[data-clip-src]').forEach((v) => clipWatcher.observe(v));
+}
+
+// A short clip shown large, looping, with controls.
+function openClip(src, label) {
+  const link = safeUrl(src);
+  if (!link) return;
+  const v = document.createElement('video');
+  Object.assign(v, { src: link, muted: true, loop: true, autoplay: true, playsInline: true, controls: true });
+  v.setAttribute('aria-label', label || '');
+  $('videoFrame').replaceChildren(v);
+  dialog.classList.remove('dialog--tall');
+  dialog.classList.add('dialog--photo');
+  dialog.showModal();
+}
+
 // A photo shown large in the same dialog as the videos.
 function openPhoto(src, alt) {
   const link = safeUrl(src);
@@ -261,6 +291,8 @@ function openVideo(url) {
 document.addEventListener('click', (e) => {
   const trigger = e.target.closest('[data-video]');
   if (trigger) openVideo(trigger.dataset.video);
+  const clip = e.target.closest('[data-clip]');
+  if (clip) openClip(clip.dataset.clip, clip.getAttribute('aria-label'));
   const photo = e.target.closest('[data-photo]');
   if (photo) openPhoto(photo.dataset.photo, photo.getAttribute('aria-label'));
 });
@@ -452,20 +484,26 @@ function renderProduction() {
   const st = DATA.studio;
   // Studio photos and videos, any number: the first sits large beside the text, the rest in a gallery below.
   const media = [...list(st.media), ...list(st.photos).map((image) => ({ image }))]
-    .map((m) => ({ ...m, image: safeUrl(m.image), video: safeUrl(m.video) }))
-    .filter((m) => m.image || m.video);
+    .map((m) => ({ ...m, image: safeUrl(m.image), video: safeUrl(m.video), clip: safeUrl(m.clip) }))
+    .filter((m) => m.image || m.video || m.clip);
   const tile = (m, big = false) => {
     const thumb = m.image || (m.video && player(m.video)?.thumb) || '';
     const title = tx(m, 'title');
-    const action = m.video ? `data-video="${esc(m.video)}"` : `data-photo="${esc(m.image)}"`;
-    return `<button class="studio-tile${big ? ' studio-tile--big' : ''}" type="button" ${action} aria-label="${esc(title || (m.video ? ui.play : ui.view))}">
-      ${thumb ? cardImg(thumb, title) : ''}${m.video ? '<span class="reel__icon" aria-hidden="true"></span>' : ''}
+    const poster = Array.isArray(thumb) ? thumb[0] : thumb;
+    // A short clip plays muted on a loop in place of the photo; a long video opens a player.
+    const action = m.clip ? `data-clip="${esc(m.clip)}"` : m.video ? `data-video="${esc(m.video)}"` : `data-photo="${esc(m.image)}"`;
+    const visual = m.clip
+      ? `<video class="card__img" muted loop playsinline preload="none"${poster ? ` poster="${esc(poster)}"` : ''} data-clip-src="${esc(m.clip)}"></video>`
+      : (thumb ? cardImg(thumb, title) : '');
+    return `<button class="studio-tile${big ? ' studio-tile--big' : ''}" type="button" ${action} aria-label="${esc(title || (m.video && !m.clip ? ui.play : ui.view))}">
+      ${visual}${m.video && !m.clip ? '<span class="reel__icon" aria-hidden="true"></span>' : ''}
       ${title ? `<span class="studio-tile__title">${esc(title)}</span>` : ''}</button>`;
   };
   $('studioPhotos').classList.toggle('studio__art--media', media.length > 0);
   $('studioPhotos').innerHTML = media.length ? tile(media[0], true) : '';
   $('studioGallery').innerHTML = media.slice(1).map((m) => tile(m)).join('');
   $('studioGallery').hidden = media.length < 2;
+  watchClips($('studio'));
   book($('studioBook'), 'studio', ui.waStudio);
 
   const models = list(DATA.models.models).filter((m) => m.name || m.photo);

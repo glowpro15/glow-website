@@ -317,7 +317,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .studio__gallery { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.6vw, 22px); }
 .studio__gallery .studio-tile { aspect-ratio: 4/3; }
 .dialog--photo .dialog__frame { aspect-ratio: auto; }
-.dialog__frame > img { display: block; width: 100%; max-height: calc(100svh - 64px); object-fit: contain; }
+.dialog__frame > img, .dialog__frame > video { display: block; width: 100%; max-height: calc(100svh - 64px); object-fit: contain; background: var(--gray); }
 
 /* Edit mode (owner only, opened with ?edit) */
 .is-editing [data-edit] { position: relative; outline: 2px dashed var(--yellow); outline-offset: -8px; }
