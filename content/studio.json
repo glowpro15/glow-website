@@ -1,11 +1,5 @@
 {
-  "photos": [],
-  "cameras": "",
-  "cameras_en": "",
-  "lighting": "",
-  "lighting_en": "",
-  "editing": "",
-  "editing_en": "",
-  "sound": "",
-  "sound_en": ""
+  "photos": [
+    "images/_MG_4164.jpg"
+  ]
 }
